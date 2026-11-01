@@ -1,0 +1,11 @@
+{
+  "name": "morgan-wilkinson-skills",
+  "version": "0.1.0",
+  "description": "Morgan's personal always-on rules and skills for Devin — global conventions applied to every repo and session.",
+  "author": {
+    "name": "Morgan Wilkinson"
+  },
+  "repository": "https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills",
+  "license": "MIT",
+  "keywords": ["rules", "conventions", "personal"]
+}
