@@ -8,9 +8,8 @@ policies always win.
 ## Sensitive data — sanitize and ask
 
 - Always sanitize personal or sensitive information before it is committed.
-- Always ask the user whether sanitized content should be committed at all.
-  Committing anything containing personal data is a human-approval task —
-  never rely on your own assumption that it's fine.
+- Committing anything containing personal data requires explicit approval
+  (see "Explicit approval"). Never rely on your own assumption that it's fine.
 
 ## GitHub — repo location
 
@@ -57,13 +56,27 @@ Items that don't apply may be dropped rather than left as empty ritual.
 - Request user testing and confirmation; provide testing data, samples,
   methods, and links with the code that needs testing in place.
 
-## Merging — human approval only
+## Explicit approval — required for gated actions
 
-- The user merges to `main` manually. Never merge without explicit user
-  confirmation — follow-up questions or continued conversation are NOT
-  approval.
-- A merge is only authorized by explicit keywords such as "approved",
-  "merge pr <number>", "I give my approval", or a close variation.
+The ONLY valid approval is the exact phrases **"I approve"** or **"Approved"**.
+
+- Statements like "this seems good", "ok", or "looks fine" are
+  acknowledgments of progress — NOT approval.
+- Follow-up questions and continued conversation are NOT approval.
+- If you are unsure whether the user has approved, stop and prompt: state
+  that you cannot proceed until they explicitly say "I approve" or
+  "Approved".
+
+Approval-gated actions:
+
+- Merging any PR or committing to `main` — the user merges manually.
+- Committing anything containing personal or sanitized sensitive data.
+- Irreversible or externally visible actions: creating or publishing repos,
+  deleting data, force-pushing, sending external messages, API calls with
+  real-world side effects.
+
+## Merging — post-merge checklist
+
 - After any merge to `main` — or any change to the deployment pipeline,
   secrets, or infra — run that repo's `docs/DEPLOYMENT-CHECKLIST.md`. A green
   merge only proves CI ran; the checklist proves the system still works.
