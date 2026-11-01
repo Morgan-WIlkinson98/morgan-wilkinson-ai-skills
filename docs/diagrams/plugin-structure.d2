@@ -1,0 +1,30 @@
+direction: right
+
+repo: GitHub repo\nmorgan-wilkinson-ai-skills {
+  manifest: ".devin-plugin/plugin.json" {
+    shape: page
+  }
+  agents: "AGENTS.md" {
+    shape: page
+  }
+  rules: "rules/*.md" {
+    shape: page
+  }
+  skills: "skills/*/SKILL.md" {
+    shape: page
+  }
+}
+
+install: "devin plugins install" {
+  shape: hexagon
+}
+
+session: Devin session {
+  ctx: Session context
+  slash: "/plugin:skill commands"
+}
+
+repo -> install: "recorded in personal manifest"
+install -> session.ctx: "AGENTS.md — always-on, every session"
+install -> session.ctx: "rules/*.md — on trigger"
+install -> session.slash: "skills — on invoke"
