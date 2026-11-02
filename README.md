@@ -12,7 +12,7 @@ A [Devin](https://devin.ai) plugin that ships personal rules and skills to every
 | `AGENTS.md` | Always-on rule | Injected into the context of every session |
 | `rules/coding-behavior.md` | Triggered rule (`model_decision`) | Loaded when the agent decides it is relevant |
 | `skills/ui-ux/` | Skill | Available as `/morgan-wilkinson-skills:ui-ux`; invoked for UI work |
-| `skills/adopt-standards/` | Skill | Available as `/morgan-wilkinson-skills:adopt-standards`; one-time migration of an existing repo to the dev/release workflow and changelog |
+| `skills/adopt-standards/` | Skill | Available as `/morgan-wilkinson-skills:adopt-standards`; one-time migration of an existing repo to the branch workflow (`dev` as testing branch) and changelog |
 | `skills/changelog/` | Skill | Available as `/morgan-wilkinson-skills:changelog`; changelog templates, entry, pre-flight, and compile procedures |
 | `hooks.json` + `hooks/approval-gate.mjs` | Lifecycle hooks | Local sessions (CLI, Devin Desktop); blocks `git push`, `gh pr create`, `gh pr merge`, and GitHub MCP PR/push tools unless the current user message contains "Approved" or "I approve" |
 | `docs/diagrams/` | Documentation | `.d2` sources plus rendered `.svg` output |
@@ -69,7 +69,7 @@ Requires `node` on `PATH`. Plugin hooks are best effort and fail open: if the ho
 
 ## Development
 
-All changes follow the workflow defined in `AGENTS.md`: GitHub issue → `feature/<description>` branch from latest `dev` → merged into `dev` without a pull request → `release/<yyyy-mm-dd>` branch cut from `dev` with the changelog compiled → pull request from the release branch into `main` → explicit human merge approval → release branch and `main` merged back into `dev`. Merging to `main` is the release — new sessions pick up the plugin at the latest commit on the default branch. Each change adds a Pending entry under `changelog/unreleased/`; see `docs/DEPLOYMENT-CHECKLIST.md` for the post-merge steps.
+All changes follow the workflow defined in `AGENTS.md`: GitHub issue → `feature/<description>` branch from latest `main` → merged into `dev` (testing branch, no pull request) to test → changelog compiled on the feature branch (or on a `release/<yyyy-mm-dd>` branch cut from `main` that carries several features) → pull request into `main` → explicit human merge approval → shipped branch and `main` merged into `dev`. Merging to `main` is the release — new sessions pick up the plugin at the latest commit on the default branch. Each change adds a Pending entry under `changelog/unreleased/`; see `docs/DEPLOYMENT-CHECKLIST.md` for the post-merge steps.
 
 Diagrams are authored in [D2](https://d2lang.com/) under `docs/diagrams/`; render with `d2` `v0.9.0` and commit the `.svg` alongside the `.d2` source (CI fails if they are out of date). Do not use mermaid.
 

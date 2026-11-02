@@ -58,38 +58,42 @@ organization (capital W-I), never the personal `Morgan-Wilkinson` account.
 
 ## Branching & issues
 
-Every repo uses `feature/*` → `dev` → `release/<yyyy-mm-dd>` → `main`.
+Feature branches ship to `main` through a PR. `dev` is a testing branch only.
 
 - Start every piece of work with the pre-flight checks above.
-- If the repo has no `dev` branch, create it from the latest `main`
-  (pushing it requires approval).
 - Create a GitHub issue for the work, then a feature branch from the latest
-  `dev`: `feature/<short-description-or-issue>`.
-- Feature branches are merged into `dev` directly, **without a PR**. Finish
-  and test the work, summarize what will land on `dev`, and after approval:
+  `main`: `feature/<short-description-or-issue>`. Never branch from `dev`.
+- **`dev` is for testing.** To test a feature, merge it into `dev` without a
+  PR after approval:
   `git switch dev && git pull --ff-only && git merge --no-ff feature/<name>`,
-  then push `dev`.
-- `dev` is promoted to `main` only through a release branch: cut
-  `release/<yyyy-mm-dd>` from `dev`, compile the changelog on it, and open a
-  PR from the release branch to `main` (the `changelog` skill, section 6).
-- Never commit directly to `dev` or `main`. `dev` changes only by merging a
-  feature branch into it or merging the release branch and `main` back into
-  it after a release;
-  `main` changes only through a release PR the user merges.
+  then push `dev`. If the repo has no `dev`, create it with
+  `git branch --no-track dev origin/main` and push it with
+  `git push -u origin dev` (requires approval).
+- `dev` is never merged into `main`, and nothing branches from it. Never
+  reset, rebuild, or force-push `dev` unless the user explicitly tells you to.
+- **Shipping to `main`**, either path (the `changelog` skill, section 6):
+  - **Single feature:** PR from the feature branch to `main`.
+  - **Several features together:** cut `release/<yyyy-mm-dd>` from `main`,
+    merge in the feature branches the user chooses, and PR the release
+    branch to `main`.
+- Never commit directly to `main` or `dev`. `main` changes only through a PR
+  the user merges (or tells you to merge). `dev` changes only by merging
+  feature branches into it for testing, and by the post-merge sync below.
 
 ## Pull requests
 
-The only PRs are release PRs, from `release/<yyyy-mm-dd>` to `main`. Never
-open a PR for a feature branch or into `dev`.
+PRs go from a feature branch or a release branch to `main`. Never open a PR
+into `dev`.
 
 Pushing a branch and opening a PR both require explicit approval (see
 "Explicit approval"). Summarize what will be pushed and what the PR will
 contain, then ask.
 
-Test thoroughly before merging into `dev` and before opening a release PR.
-Every release PR gets a description that is genuinely useful to a reviewer —
-full enough that they don't have to reconstruct context from the diff. It
-covers every change in the release, linking each changelog entry and issue:
+Test thoroughly — including on `dev` when the repo deploys it — before
+opening a PR. Every PR gets a description that is genuinely useful to a
+reviewer — full enough that they don't have to reconstruct context from the
+diff. A release PR covers every feature it carries, linking each changelog
+entry and issue:
 
 - **Summary** — 1–3 bullets describing behavior, not filenames.
 - **Why** — what it addresses/fixes and why; the most important part. Link the
@@ -126,8 +130,9 @@ The ONLY valid approval is the exact phrases **"I approve"** or **"Approved"**.
 Approval-gated actions:
 
 - Pushing any branch (`git push`) and opening a PR — including pushing `dev`
-  after merging a feature branch into it.
-- Merging any PR or committing to `main` — the user merges manually.
+  after merging a feature branch into it for testing.
+- Merging any PR or committing to `main` — the user merges manually unless
+  they explicitly tell you to merge a specific PR.
 - Committing anything containing personal or sanitized sensitive data.
 - Irreversible or externally visible actions: creating or publishing repos,
   deleting data, force-pushing, sending external messages, API calls with
@@ -149,18 +154,19 @@ the `changelog` skill for the templates and exact procedures.
   `changelog/unreleased/<yyyy-mm-dd>-<issue>-<slug>.md`, with status
   **Pending**, in the same branch as the change.
 - Entries stay Pending on feature branches and `dev`. They are compiled to
-  **Approved** only on a release branch, and reach `main` only when the user
-  merges the release PR.
+  **Approved** on the branch being shipped (feature or release) just before
+  its PR to `main`, and reach `main` only when that PR is merged.
 
 ## Merging — post-merge checklist
 
 - After any merge to `main` — or any change to the deployment pipeline,
   secrets, or infra — run that repo's `docs/DEPLOYMENT-CHECKLIST.md`. A green
   merge only proves CI ran; the checklist proves the system still works.
-- After a release PR is merged to `main`, merge the release branch into
-  `dev`, then merge `main` into `dev`, and push `dev` after approval (the
-  `changelog` skill, section 6). Merging only `main` leaves released
-  changelog entries on `dev` as Pending, because `main` takes squash merges.
+- After a PR is merged to `main`, sync `dev`: merge the shipped branch
+  (feature or release) into `dev`, then merge `main` into `dev`, and push
+  `dev` after approval (the `changelog` skill, section 6). Merging only
+  `main` leaves shipped changelog entries on `dev` as Pending, because `main`
+  takes squash merges.
 
 ## Deployment checklist
 
