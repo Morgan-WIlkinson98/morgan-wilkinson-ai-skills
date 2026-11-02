@@ -31,9 +31,9 @@ Create on the current feature branch, as part of the first change that needs an 
 
 1. Create exactly one file per branch: `changelog/unreleased/<yyyy-mm-dd>-<issue-number>-<short-slug>.md`. The date is the day the entry is created. Use the issue number from the GitHub issue for the work; omit the `<issue-number>-` segment only when there is no issue.
 2. Fill it from the entry template in section 4. Status is always `Pending`.
-3. The PR does not exist when the entry is first written. After the PR is opened, add the PR and Files changed links in a follow-up commit on the same branch.
-4. If the branch's scope changes, update the entry before asking for review — the entry must describe what the PR actually does.
-5. All links must be clickable: issue and PR links are full `https://github.com/<owner>/<repo>/...` URLs (GitHub does not autolink `#41` inside `.md` files).
+3. Feature branches merge into `dev` without a PR, so entries have no PR link. The release compile adds a link to the branch's merge commit on `dev`, which shows every file the change touched.
+4. If the branch's scope changes, update the entry before merging into `dev` — the entry must describe what the branch actually does.
+5. All links must be clickable: issue, commit, and PR links are full `https://github.com/<owner>/<repo>/...` URLs (GitHub does not autolink `#41` inside `.md` files).
 
 `Type` is one of: `Feature`, `Fix`, `Change`, `Removal`, `Security`.
 
@@ -61,7 +61,6 @@ When the pre-flight check in AGENTS.md finds uncommitted, untracked, unpushed, o
 - **Status:** Pending
 - **Type:** Feature
 - **Issue:** [#<n>](https://github.com/<owner>/<repo>/issues/<n>)
-- **Pull request:** [#<n>](https://github.com/<owner>/<repo>/pull/<n>) · [Files changed](https://github.com/<owner>/<repo>/pull/<n>/files)
 - **Branch:** `feature/<branch-name>`
 
 ## What changed
@@ -92,14 +91,14 @@ A compiled entry inside the year section looks like:
 - **Status:** Approved — [release <yyyy-mm-dd>](https://github.com/<owner>/<repo>/pull/<release-pr>)
 - **Type:** <Type>
 - **Issue:** [#<n>](https://github.com/<owner>/<repo>/issues/<n>)
-- **Pull request:** [#<n>](https://github.com/<owner>/<repo>/pull/<n>) · [Files changed](https://github.com/<owner>/<repo>/pull/<n>/files)
+- **Changes:** [`<short-sha>`](https://github.com/<owner>/<repo>/commit/<sha>) — merge of `feature/<branch-name>` into `dev`
 
 **What changed:** <text from the entry>
 
 **Why:** <text from the entry>
 ```
 
-The heading date is the entry's file-name date. The status links to the release PR that carried the entry to `main`. The `Branch` line is dropped when compiling.
+The heading date is the entry's file-name date. The status links to the release PR that carried the entry to `main`. The `Branch` line is replaced by the `Changes` link to the branch's merge commit on `dev`.
 
 ## 6. Release — compile on a release branch, merge to `main`
 
@@ -110,10 +109,10 @@ The heading date is the entry's file-name date. The status links to the release 
 2. If `changelog/unreleased/` has no entry files, tell the user there is nothing to release and stop.
 3. Archive first: if `CHANGELOG.md` contains a `## <yyyy>` section older than the current year, move that whole section into `docs/changelog/<yyyy>.md` (title `# Changelog — <yyyy>`), and update the **Archives** line with a link to it, newest year first.
 4. Ensure a `## <current yyyy>` section exists directly below the header.
-5. Process entry files in ascending file-name order. Insert each one at the top of the current year section in the compiled format, so the newest entry ends up first. Fill in any PR links still missing.
+5. Process entry files in ascending file-name order. Insert each one at the top of the current year section in the compiled format, so the newest entry ends up first. Find each entry's merge commit with `git log --merges --first-parent dev --format='%H %s' | grep "feature/<branch-name>"` and use it for the `Changes` link.
 6. Delete each compiled entry file; keep `changelog/unreleased/.gitkeep`.
 7. Commit on the release branch: `docs(changelog): compile release <yyyy-mm-dd>`.
-8. Show the user the compiled diff and the list of entries in the release, then ask for explicit approval before pushing the branch and opening the PR from `release/<yyyy-mm-dd>` to `main`. The PR description lists every entry with its feature PR link.
+8. Show the user the compiled diff and the list of entries in the release, then ask for explicit approval before pushing the branch and opening the PR from `release/<yyyy-mm-dd>` to `main`. This is the only PR in the workflow; its description follows the PR rules in AGENTS.md and lists every entry with its issue and `Changes` link.
 9. After the PR is opened, replace `<release-pr>` in the compiled status links with the release PR number in a follow-up commit on the release branch.
 10. The user merges the release PR. Only fixes for problems found while testing the release go onto the release branch, each with its own entry compiled the same way.
 

@@ -65,23 +65,30 @@ Every repo uses `feature/*` → `dev` → `release/<yyyy-mm-dd>` → `main`.
   (pushing it requires approval).
 - Create a GitHub issue for the work, then a feature branch from the latest
   `dev`: `feature/<short-description-or-issue>`.
-- Feature PRs target `dev`.
+- Feature branches are merged into `dev` directly, **without a PR**. Finish
+  and test the work, summarize what will land on `dev`, and after approval:
+  `git switch dev && git pull --ff-only && git merge --no-ff feature/<name>`,
+  then push `dev`.
 - `dev` is promoted to `main` only through a release branch: cut
   `release/<yyyy-mm-dd>` from `dev`, compile the changelog on it, and open a
   PR from the release branch to `main` (the `changelog` skill, section 6).
-- Never commit directly to `dev` or `main`. The only exception is merging
-  `main` back into `dev` after a release (see "Merging — post-merge
-  checklist"), after approval.
+- Never commit directly to `dev` or `main`. `dev` changes only by merging a
+  feature branch into it or merging `main` back into it after a release;
+  `main` changes only through a release PR the user merges.
 
 ## Pull requests
 
-Pushing a branch and opening a PR both require explicit approval (see
-"Explicit approval"). Finish and test the work locally, summarize what will be
-pushed and what the PR will contain, then ask.
+The only PRs are release PRs, from `release/<yyyy-mm-dd>` to `main`. Never
+open a PR for a feature branch or into `dev`.
 
-Test thoroughly before opening a PR. Every feature branch gets a PR whose
-description is genuinely useful to a reviewer — full enough that they don't
-have to reconstruct context from the diff:
+Pushing a branch and opening a PR both require explicit approval (see
+"Explicit approval"). Summarize what will be pushed and what the PR will
+contain, then ask.
+
+Test thoroughly before merging into `dev` and before opening a release PR.
+Every release PR gets a description that is genuinely useful to a reviewer —
+full enough that they don't have to reconstruct context from the diff. It
+covers every change in the release, linking each changelog entry and issue:
 
 - **Summary** — 1–3 bullets describing behavior, not filenames.
 - **Why** — what it addresses/fixes and why; the most important part. Link the
@@ -117,7 +124,8 @@ The ONLY valid approval is the exact phrases **"I approve"** or **"Approved"**.
 
 Approval-gated actions:
 
-- Pushing any branch (`git push`) and opening a PR.
+- Pushing any branch (`git push`) and opening a PR — including pushing `dev`
+  after merging a feature branch into it.
 - Merging any PR or committing to `main` — the user merges manually.
 - Committing anything containing personal or sanitized sensitive data.
 - Irreversible or externally visible actions: creating or publishing repos,

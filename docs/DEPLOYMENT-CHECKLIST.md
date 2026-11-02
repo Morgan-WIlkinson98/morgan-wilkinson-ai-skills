@@ -5,7 +5,6 @@ Merging to `main` is the release: new sessions load the plugin at the latest com
 ## One-time setup
 
 - [ ] `dev` branch exists on `origin` (created from `main`).
-- [ ] Optional: set the repository default branch for PRs so feature PRs target `dev`.
 
 ## Release (promote `dev` to `main`)
 
