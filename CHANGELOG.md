@@ -11,7 +11,7 @@ Changes merged to `main`, newest first. Changes still in progress are in
 
 - **Status:** Approved
 - **Type:** Change
-- **Issue:** _added once the issue is created_
+- **Issue:** [#9](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/issues/9)
 - **Pull request:** [#8](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/8) · [Files changed](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/8/files)
 
 **What changed:** Feature branches start from `main`, are merged into `dev` only for testing, and ship to `main` through their own PR or through a `release/<yyyy-mm-dd>` branch cut from `main` that carries several features. `dev` is never merged into `main` and is never reset unless the user says so. The changelog is compiled on the branch being shipped, and after each merge the shipped branch and `main` are merged into `dev`. Compiled entries link the PR that carried them.
