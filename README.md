@@ -12,6 +12,7 @@ A [Devin](https://devin.ai) plugin that ships personal rules and skills to every
 | `AGENTS.md` | Always-on rule | Injected into the context of every session |
 | `rules/coding-behavior.md` | Triggered rule (`model_decision`) | Loaded when the agent decides it is relevant |
 | `skills/ui-ux/` | Skill | Available as `/morgan-wilkinson-skills:ui-ux`; invoked for UI work |
+| `skills/adopt-standards/` | Skill | Available as `/morgan-wilkinson-skills:adopt-standards`; one-time migration of an existing repo to the dev/release workflow and changelog |
 | `skills/changelog/` | Skill | Available as `/morgan-wilkinson-skills:changelog`; changelog templates, entry, pre-flight, and compile procedures |
 | `hooks.json` + `hooks/approval-gate.mjs` | Lifecycle hooks | Local sessions (CLI, Devin Desktop); blocks `git push`, `gh pr create`, `gh pr merge`, and GitHub MCP PR/push tools unless the current user message contains "Approved" or "I approve" |
 | `docs/diagrams/` | Documentation | `.d2` sources plus rendered `.svg` output |
