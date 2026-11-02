@@ -9,7 +9,7 @@ Changes merged to `main`, newest first. Changes still in progress are in
 
 ### 2026-11-02 — Add pre-flight checks, changelog standard, and approval-gated pushes
 
-- **Status:** Approved — [release 2026-11-02](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/<release-pr>)
+- **Status:** Approved — [release 2026-11-02](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/5)
 - **Type:** Feature
 - **Issue:** [#3](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/issues/3)
 - **Changes:** [`6de479b`](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/commit/6de479b692c9c4005dbbf18a4ccd6d09a65d8d15) — merge of `feature/changelog-preflight-approval-gates` into `dev`
