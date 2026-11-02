@@ -73,7 +73,8 @@ Every repo uses `feature/*` → `dev` → `release/<yyyy-mm-dd>` → `main`.
   `release/<yyyy-mm-dd>` from `dev`, compile the changelog on it, and open a
   PR from the release branch to `main` (the `changelog` skill, section 6).
 - Never commit directly to `dev` or `main`. `dev` changes only by merging a
-  feature branch into it or merging `main` back into it after a release;
+  feature branch into it or merging the release branch and `main` back into
+  it after a release;
   `main` changes only through a release PR the user merges.
 
 ## Pull requests
@@ -156,10 +157,10 @@ the `changelog` skill for the templates and exact procedures.
 - After any merge to `main` — or any change to the deployment pipeline,
   secrets, or infra — run that repo's `docs/DEPLOYMENT-CHECKLIST.md`. A green
   merge only proves CI ran; the checklist proves the system still works.
-- After a release PR is merged to `main`, merge `main` back into `dev` and
-  push `dev` after approval (the `changelog` skill, section 6). This clears
-  the released changelog entries from `dev` and keeps the next release diff
-  clean.
+- After a release PR is merged to `main`, merge the release branch into
+  `dev`, then merge `main` into `dev`, and push `dev` after approval (the
+  `changelog` skill, section 6). Merging only `main` leaves released
+  changelog entries on `dev` as Pending, because `main` takes squash merges.
 
 ## Deployment checklist
 

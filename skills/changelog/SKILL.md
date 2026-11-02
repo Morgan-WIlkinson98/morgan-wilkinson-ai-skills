@@ -118,10 +118,17 @@ The heading date is the entry's file-name date. The status links to the release 
 
 After the user merges the release PR (post-merge checklist):
 
-1. Merge `main` back into `dev`, then push `dev` after approval:
-   `git fetch --all --prune && git switch dev && git pull --ff-only && git merge --no-ff origin/main`
-   This removes the compiled entry files from `dev` and keeps the next release PR's diff limited to new work. It is required because `main` only accepts squash or rebase merges.
-2. Entries added to `dev` after the release branch was cut stay in `changelog/unreleased/` as Pending for the next release.
+1. Merge the release branch into `dev`, then merge `main` into `dev`, then push `dev` after approval:
+   ```
+   git fetch --all --prune && git switch dev && git pull --ff-only
+   git merge --no-ff release/<yyyy-mm-dd> -m "Merge release/<yyyy-mm-dd> into dev"
+   git merge --no-ff origin/main -m "Merge main into dev"
+   ```
+   Use the local `release/<yyyy-mm-dd>` branch: repos that delete head branches on merge remove `origin/release/<yyyy-mm-dd>`. If the local branch is missing, recreate it from the release PR's head commit (`gh pr view <n> --json headRefOid`) before merging.
+   Both merges are required. `main` only accepts squash or rebase merges, so the squash commit on `main` does not carry the compile commit's deletions back to `dev`: merging only `main` leaves the released entry files on `dev` as Pending, and they would be compiled again in the next release. Merging the release branch first applies the deletions and the compiled `CHANGELOG.md`; merging `main` afterwards records `main` as an ancestor of `dev`, so the next release PR's diff is limited to new work. The second merge applies identical changes and should not conflict; if it does, stop and show the user the conflict.
+2. Verify before pushing:
+   - `git diff origin/main dev -- CHANGELOG.md` is empty.
+   - `git diff --name-status release/<yyyy-mm-dd> dev -- changelog/unreleased` lists only `A` (added) lines — entries merged into `dev` after the release branch was cut. They stay Pending for the next release.
 3. Ask before deleting the merged release branch.
 
 Never push to `main` directly or bypass branch protection; every change reaches `main` through a release PR the user merges.

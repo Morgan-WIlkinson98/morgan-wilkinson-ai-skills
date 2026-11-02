@@ -15,7 +15,7 @@ Merging to `main` is the release: new sessions load the plugin at the latest com
 
 ## After every merge to `main`
 
-1. Merge `main` back into `dev` and push `dev` (`changelog` skill, section 6).
+1. Merge the release branch into `dev`, then `main` into `dev`, and push `dev` (`changelog` skill, section 6).
 2. Confirm the **Validate plugin** workflow passed on `main`.
 3. If `docs/diagrams/` changed, confirm the **Check diagrams** workflow passed.
 4. Refresh the installed plugin: `devin plugins update morgan-wilkinson-skills`.
