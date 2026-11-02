@@ -9,7 +9,7 @@ Changes merged to `main`, newest first. Changes still in progress are in
 
 ### 2026-11-02 — Add adopt-standards skill for migrating existing repos
 
-- **Status:** Approved — [release 2026-11-02-2](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/<release-pr>)
+- **Status:** Approved — [release 2026-11-02-2](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/8)
 - **Type:** Feature
 - **Issue:** [#7](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/issues/7)
 - **Changes:** [`b032776`](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/commit/b03277660b10272d4513f8c2629e76acfc492156) — merge of `feature/adopt-standards-skill` into `dev`
@@ -20,7 +20,7 @@ Changes merged to `main`, newest first. Changes still in progress are in
 
 ### 2026-11-02 — Fix release back-merge leaving released entries Pending on dev
 
-- **Status:** Approved — [release 2026-11-02-2](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/<release-pr>)
+- **Status:** Approved — [release 2026-11-02-2](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/8)
 - **Type:** Fix
 - **Issue:** [#6](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/issues/6)
 - **Changes:** [`506b88e`](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/commit/506b88ee378906137bafbd87ceb8b75dbae99dc5) — merge of `feature/fix-release-back-merge` into `dev`
