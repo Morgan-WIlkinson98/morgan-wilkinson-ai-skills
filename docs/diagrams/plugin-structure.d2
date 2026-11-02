@@ -13,6 +13,9 @@ repo: GitHub repo\nmorgan-wilkinson-ai-skills {
   skills: "skills/*/SKILL.md" {
     shape: page
   }
+  hooks: "hooks.json\nhooks/approval-gate.mjs" {
+    shape: page
+  }
 }
 
 install: "devin plugins install" {
@@ -22,9 +25,11 @@ install: "devin plugins install" {
 session: Devin session {
   ctx: Session context
   slash: "/plugin:skill commands"
+  gate: "Tool calls\n(push, PR create/merge)"
 }
 
 repo -> install: "recorded in personal manifest"
 install -> session.ctx: "AGENTS.md — always-on, every session"
 install -> session.ctx: "rules/*.md — on trigger"
 install -> session.slash: "skills — on invoke"
+install -> session.gate: "hooks — local sessions, block without approval"

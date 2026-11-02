@@ -46,6 +46,24 @@ if (existsSync(manifestPath)) {
 // --- Always-on rules ---
 check(existsSync(join(root, 'AGENTS.md')), 'AGENTS.md exists (always-on rules)');
 
+// --- Hooks ---
+const hooksPath = join(root, 'hooks.json');
+if (existsSync(hooksPath)) {
+  try {
+    const hooks = JSON.parse(readFileSync(hooksPath, 'utf8'));
+    check(true, 'hooks.json parses as JSON');
+    for (const [event, groups] of Object.entries(hooks)) {
+      check(Array.isArray(groups), `hooks.json ${event} is an array of matcher groups`);
+      for (const h of (Array.isArray(groups) ? groups : []).flatMap((g) => g.hooks ?? [])) {
+        const script = h.command?.match(/\/(hooks\/[\w.-]+)/)?.[1];
+        if (script) check(existsSync(join(root, script)), `hooks.json ${event} script ${script} exists`);
+      }
+    }
+  } catch (e) {
+    check(false, `hooks.json parses as JSON (${e.message})`);
+  }
+}
+
 // --- Skills ---
 const skillsDir = join(root, 'skills');
 if (existsSync(skillsDir)) {
