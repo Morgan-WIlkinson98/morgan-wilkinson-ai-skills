@@ -3,7 +3,7 @@
 - **Status:** Pending
 - **Type:** Feature
 - **Issue:** [#3](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/issues/3)
-- **Pull request:** _added once the PR is opened_
+- **Pull request:** [#4](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/4) · [Files changed](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/4/files)
 - **Branch:** `feature/changelog-preflight-approval-gates`
 
 ## What changed
