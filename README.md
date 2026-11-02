@@ -68,7 +68,7 @@ Requires `node` on `PATH`. Plugin hooks are best effort and fail open: if the ho
 
 ## Development
 
-All changes follow the workflow defined in `AGENTS.md`: GitHub issue → `feature/<description>` branch from latest `dev` → pull request into `dev` → pull request from `dev` into `main` → explicit human merge approval. Merging to `main` is the release — new sessions pick up the plugin at the latest commit on the default branch. Each change adds a Pending entry under `changelog/unreleased/`; see `docs/DEPLOYMENT-CHECKLIST.md` for the post-merge steps.
+All changes follow the workflow defined in `AGENTS.md`: GitHub issue → `feature/<description>` branch from latest `dev` → pull request into `dev` → `release/<yyyy-mm-dd>` branch cut from `dev` with the changelog compiled → pull request from the release branch into `main` → explicit human merge approval → `main` merged back into `dev`. Merging to `main` is the release — new sessions pick up the plugin at the latest commit on the default branch. Each change adds a Pending entry under `changelog/unreleased/`; see `docs/DEPLOYMENT-CHECKLIST.md` for the post-merge steps.
 
 Diagrams are authored in [D2](https://d2lang.com/) under `docs/diagrams/`; the rendered `.svg` is committed alongside the `.d2` source (CI also re-renders on merge). Do not use mermaid.
 

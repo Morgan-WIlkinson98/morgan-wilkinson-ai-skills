@@ -58,18 +58,20 @@ organization (capital W-I), never the personal `Morgan-Wilkinson` account.
 
 ## Branching & issues
 
-Every repo uses `feature/*` → `dev` → `main`.
+Every repo uses `feature/*` → `dev` → `release/<yyyy-mm-dd>` → `main`.
 
 - Start every piece of work with the pre-flight checks above.
 - If the repo has no `dev` branch, create it from the latest `main`
   (pushing it requires approval).
 - Create a GitHub issue for the work, then a feature branch from the latest
   `dev`: `feature/<short-description-or-issue>`.
-- Feature PRs target `dev`. `dev` is promoted to `main` with a PR from `dev`
-  to `main`.
-- Never commit directly to `dev` or `main`. The only exceptions are the
-  post-merge changelog compile on `main` and the merge of `main` back into
-  `dev` (see "Merging — post-merge checklist"), both after approval.
+- Feature PRs target `dev`.
+- `dev` is promoted to `main` only through a release branch: cut
+  `release/<yyyy-mm-dd>` from `dev`, compile the changelog on it, and open a
+  PR from the release branch to `main` (the `changelog` skill, section 6).
+- Never commit directly to `dev` or `main`. The only exception is merging
+  `main` back into `dev` after a release (see "Merging — post-merge
+  checklist"), after approval.
 
 ## Pull requests
 
@@ -137,18 +139,19 @@ the `changelog` skill for the templates and exact procedures.
 - Every feature, fix, or user-visible change adds exactly one entry file,
   `changelog/unreleased/<yyyy-mm-dd>-<issue>-<slug>.md`, with status
   **Pending**, in the same branch as the change.
-- Entries stay Pending on feature branches and `dev`. They become
-  **Approved** only through the post-merge compile on `main`.
+- Entries stay Pending on feature branches and `dev`. They are compiled to
+  **Approved** only on a release branch, and reach `main` only when the user
+  merges the release PR.
 
 ## Merging — post-merge checklist
 
 - After any merge to `main` — or any change to the deployment pipeline,
   secrets, or infra — run that repo's `docs/DEPLOYMENT-CHECKLIST.md`. A green
   merge only proves CI ran; the checklist proves the system still works.
-- After any merge to `main`, compile the changelog (the `changelog` skill,
-  section 6): move each `changelog/unreleased/` entry into `CHANGELOG.md` as
-  Approved, archive previous years, and, after approval, commit to `main`
-  and merge `main` back into `dev`.
+- After a release PR is merged to `main`, merge `main` back into `dev` and
+  push `dev` after approval (the `changelog` skill, section 6). This clears
+  the released changelog entries from `dev` and keeps the next release diff
+  clean.
 
 ## Deployment checklist
 

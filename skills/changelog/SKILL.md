@@ -1,6 +1,6 @@
 ---
 name: changelog
-description: "Changelog standard for every repo — bootstrap CHANGELOG.md and changelog/unreleased/, add a Pending entry for each feature or fix, summarize pending entries during pre-flight, and compile entries to Approved after a merge to main (with yearly archives)."
+description: "Changelog standard for every repo — bootstrap CHANGELOG.md and changelog/unreleased/, add a Pending entry for each feature or fix, summarize pending entries during pre-flight, and compile entries to Approved on a release branch cut from dev and merged to main (with yearly archives)."
 allowed-tools:
   - read
   - grep
@@ -18,7 +18,7 @@ Every repo keeps a changelog in two parts:
 | `CHANGELOG.md` | Compiled entries merged to `main`, current year only | Approved |
 | `docs/changelog/<yyyy>.md` | Compiled entries from previous years | Approved |
 
-An entry is Pending while it lives on a feature branch or `dev`. It becomes Approved only when the post-merge compile runs on `main`. Never mark an entry Approved anywhere else.
+An entry is Pending while it lives on a feature branch or `dev`. It is compiled to Approved only on a `release/<yyyy-mm-dd>` branch, and reaches `main` only when the user merges the release PR. Never mark an entry Approved anywhere else.
 
 ## 1. Bootstrap (repo has no changelog)
 
@@ -89,7 +89,7 @@ A compiled entry inside the year section looks like:
 ```markdown
 ### <yyyy-mm-dd> — <Title>
 
-- **Status:** Approved — merged to `main` <yyyy-mm-dd>
+- **Status:** Approved — [release <yyyy-mm-dd>](https://github.com/<owner>/<repo>/pull/<release-pr>)
 - **Type:** <Type>
 - **Issue:** [#<n>](https://github.com/<owner>/<repo>/issues/<n>)
 - **Pull request:** [#<n>](https://github.com/<owner>/<repo>/pull/<n>) · [Files changed](https://github.com/<owner>/<repo>/pull/<n>/files)
@@ -99,18 +99,30 @@ A compiled entry inside the year section looks like:
 **Why:** <text from the entry>
 ```
 
-The heading date is the entry's file-name date; the merge date is the date of the merge to `main`. The `Branch` line is dropped when compiling.
+The heading date is the entry's file-name date. The status links to the release PR that carried the entry to `main`. The `Branch` line is dropped when compiling.
 
-## 6. Compile (post-merge checklist, after a merge to `main`)
+## 6. Release — compile on a release branch, merge to `main`
 
-Run on an up-to-date local `main` (`git fetch --all --prune && git switch main && git pull --ff-only`):
+`dev` is promoted to `main` only through a release branch. Run when the user asks for a release:
 
-1. If `changelog/unreleased/` has no entry files, there is nothing to compile — stop.
-2. Archive first: if `CHANGELOG.md` contains a `## <yyyy>` section older than the current year, move that whole section into `docs/changelog/<yyyy>.md` (title `# Changelog — <yyyy>`), and update the **Archives** line with a link to it, newest year first.
-3. Ensure a `## <current yyyy>` section exists directly below the header.
-4. Process entry files in ascending file-name order. Insert each one at the top of the current year section in the compiled format, so the newest entry ends up first. Fill in any PR links still missing, using the merged PR.
-5. Delete each compiled entry file; keep `changelog/unreleased/.gitkeep`.
-6. Show the user the diff, then ask for explicit approval ("Approved" / "I approve") before committing to `main` and pushing. Commit message: `docs(changelog): compile entries merged to main`.
-7. After the push, merge `main` back into `dev` (`git switch dev && git pull --ff-only && git merge --no-ff main`) and push `dev` under the same approval, so `dev` no longer shows the compiled entries as Pending.
+1. Pre-flight, then cut the branch from an up-to-date `dev`:
+   `git fetch --all --prune && git switch dev && git pull --ff-only && git switch -c release/<yyyy-mm-dd>`
+2. If `changelog/unreleased/` has no entry files, tell the user there is nothing to release and stop.
+3. Archive first: if `CHANGELOG.md` contains a `## <yyyy>` section older than the current year, move that whole section into `docs/changelog/<yyyy>.md` (title `# Changelog — <yyyy>`), and update the **Archives** line with a link to it, newest year first.
+4. Ensure a `## <current yyyy>` section exists directly below the header.
+5. Process entry files in ascending file-name order. Insert each one at the top of the current year section in the compiled format, so the newest entry ends up first. Fill in any PR links still missing.
+6. Delete each compiled entry file; keep `changelog/unreleased/.gitkeep`.
+7. Commit on the release branch: `docs(changelog): compile release <yyyy-mm-dd>`.
+8. Show the user the compiled diff and the list of entries in the release, then ask for explicit approval before pushing the branch and opening the PR from `release/<yyyy-mm-dd>` to `main`. The PR description lists every entry with its feature PR link.
+9. After the PR is opened, replace `<release-pr>` in the compiled status links with the release PR number in a follow-up commit on the release branch.
+10. The user merges the release PR. Only fixes for problems found while testing the release go onto the release branch, each with its own entry compiled the same way.
 
-If branch protection rejects the direct push to `main`, do not bypass it. Put the compile commit on `chore/changelog-compile-<yyyy-mm-dd>` and ask the user to merge it to `main`.
+After the user merges the release PR (post-merge checklist):
+
+1. Merge `main` back into `dev`, then push `dev` after approval:
+   `git fetch --all --prune && git switch dev && git pull --ff-only && git merge --no-ff origin/main`
+   This removes the compiled entry files from `dev` and keeps the next release PR's diff limited to new work. It is required because `main` only accepts squash or rebase merges.
+2. Entries added to `dev` after the release branch was cut stay in `changelog/unreleased/` as Pending for the next release.
+3. Ask before deleting the merged release branch.
+
+Never push to `main` directly or bypass branch protection; every change reaches `main` through a release PR the user merges.
