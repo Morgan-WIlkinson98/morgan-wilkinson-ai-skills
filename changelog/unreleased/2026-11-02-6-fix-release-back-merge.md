@@ -2,7 +2,7 @@
 
 - **Status:** Pending
 - **Type:** Fix
-- **Issue:** _added once the issue is created_
+- **Issue:** [#6](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/issues/6)
 - **Branch:** `feature/fix-release-back-merge`
 
 ## What changed
