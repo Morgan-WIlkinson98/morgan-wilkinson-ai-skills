@@ -2,7 +2,7 @@
 
 - **Status:** Pending
 - **Type:** Feature
-- **Issue:** _added once the issue is created_
+- **Issue:** [#7](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/issues/7)
 - **Branch:** `feature/adopt-standards-skill`
 
 ## What changed
