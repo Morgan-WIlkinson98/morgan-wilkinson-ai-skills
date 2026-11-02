@@ -7,27 +7,38 @@ Changes merged to `main`, newest first. Changes still in progress are in
 
 ## 2026
 
+### 2026-11-02 — Make dev a testing branch and ship feature branches to main by PR
+
+- **Status:** Approved
+- **Type:** Change
+- **Issue:** _added once the issue is created_
+- **Pull request:** [#8](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/8) · [Files changed](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/8/files)
+
+**What changed:** Feature branches start from `main`, are merged into `dev` only for testing, and ship to `main` through their own PR or through a `release/<yyyy-mm-dd>` branch cut from `main` that carries several features. `dev` is never merged into `main` and is never reset unless the user says so. The changelog is compiled on the branch being shipped, and after each merge the shipped branch and `main` are merged into `dev`. Compiled entries link the PR that carried them.
+
+**Why:** `dev` is meant to be a testing branch, not a release line. Releasing from `dev` would ship every feature merged there for testing, including untested ones.
+
 ### 2026-11-02 — Add adopt-standards skill for migrating existing repos
 
-- **Status:** Approved — [release 2026-11-02-2](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/8)
+- **Status:** Approved
 - **Type:** Feature
 - **Issue:** [#7](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/issues/7)
-- **Changes:** [`b032776`](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/commit/b03277660b10272d4513f8c2629e76acfc492156) — merge of `feature/adopt-standards-skill` into `dev`
+- **Pull request:** [#8](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/8) · [Files changed](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/8/files)
 
-**What changed:** A new `adopt-standards` skill migrates one repo to the dev/release workflow and changelog standard: eligibility and pre-flight checks, an inventory of rule files, workflows, and branches, local changes on `feature/adopt-standards`, and a single approval request for pushes, merges, and branch cleanup.
+**What changed:** A new `adopt-standards` skill migrates one existing repo to the branch workflow and changelog standard: eligibility and pre-flight checks, an inventory of rule files, workflows, and branches, local changes on `feature/adopt-standards`, and a single approval request for pushes, merges, PRs, and branch cleanup.
 
-**Why:** The plugin's rules apply only to new work and are not retroactive. Existing repos had no `dev` branch or changelog, repo-level AGENTS.md files still described feature PRs to `main`, and many local branches were already merged.
+**Why:** The plugin's rules apply only to new work and are not retroactive. Existing repos had no `dev` branch or changelog, repo-level rule files described a different workflow, and many local branches were already merged.
 
-### 2026-11-02 — Fix release back-merge leaving released entries Pending on dev
+### 2026-11-02 — Fix dev sync leaving shipped entries Pending on dev
 
-- **Status:** Approved — [release 2026-11-02-2](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/8)
+- **Status:** Approved
 - **Type:** Fix
 - **Issue:** [#6](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/issues/6)
-- **Changes:** [`506b88e`](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/commit/506b88ee378906137bafbd87ceb8b75dbae99dc5) — merge of `feature/fix-release-back-merge` into `dev`
+- **Pull request:** [#8](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/8) · [Files changed](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/8/files)
 
-**What changed:** After a release, the release branch is merged into `dev` before `main` is, followed by checks that `CHANGELOG.md` matches `main` and that only post-cut entries remain in `changelog/unreleased/`.
+**What changed:** After a merge to `main`, the shipped branch is merged into `dev` before `main` is, followed by checks that `CHANGELOG.md` matches `main` and that only entries for features still in testing remain in `changelog/unreleased/`.
 
-**Why:** `main` only accepts squash or rebase merges, so merging only `main` into `dev` did not carry the compile commit's deletions back to `dev`. Released entries stayed Pending on `dev` and would have been compiled again in the next release.
+**Why:** `main` only accepts squash or rebase merges, so merging only `main` into `dev` did not carry the compile commit's deletions to `dev`. Shipped entries stayed Pending on `dev` and would have been compiled again.
 
 ### 2026-11-02 — Add pre-flight checks, changelog standard, and approval-gated pushes
 
