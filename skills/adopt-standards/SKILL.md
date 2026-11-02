@@ -34,12 +34,14 @@ Collect and show the user:
 
 ## 3. Changes on `feature/adopt-standards`
 
-1. If `dev` does not exist, create it locally from `origin/<default>`. Branch `feature/adopt-standards` from `dev`.
+1. If `dev` does not exist, create it locally with `git branch --no-track dev origin/<default>`. Without `--no-track`, `dev` tracks `origin/<default>` and a later `git pull` or `git push` on `dev` targets the default branch. If `dev` already exists, use `git switch -c feature/adopt-standards --no-track origin/dev`; otherwise branch `feature/adopt-standards` from the new local `dev`. Push new branches with `git push -u origin <branch>`.
+   - If `origin/dev` and `origin/<default>` already diverge in content (not just history), report the differing files before continuing — the first release will carry `dev`'s versions to `main`.
+   - If the repo's rules describe `dev` as a disposable staging branch (reset or never promoted), call that out: under this workflow everything merged into `dev` ships with the next release.
 2. Bootstrap the changelog per the `changelog` skill, section 1. If a changelog already exists in another format, keep its content verbatim under a `## Before <yyyy-mm-dd>` heading below the year sections and tell the user.
 3. Add a Pending entry for the migration itself (`Type: Change`).
 4. Add a **Release** section to the deployment checklist (create `docs/DEPLOYMENT-CHECKLIST.md` if none exists): cut `release/<yyyy-mm-dd>` from `dev`, compile the changelog, PR to `main`, then merge the release branch and `main` into `dev`. Keep repo-specific steps (version bumps, tags, deploys) and place them on the release branch or after the release merge, whichever the repo needs — never as a direct commit to `main`.
 5. Update repo rule files so they do not contradict the global workflow: branch from `dev` instead of `main`; feature branches merge into `dev` without a PR; release PRs are the only PRs; changelog entry per change. Change only the conflicting statements and keep repo-specific rules intact. If the repo has a documentation-sync rule, satisfy it.
-6. Do not change workflows in this step. Report workflows that push to `main` with a proposed fix (usually: make it a check, or move the write onto the release branch) and ask.
+6. Do not change workflows in this step. Report workflows that push to `main` with a proposed fix (usually: make it a check, or move the write onto the release branch) and ask. Also report workflows that only act on feature PRs (preview comments, per-PR checks), since feature branches no longer have PRs.
 7. Commit: `chore: adopt dev/release workflow and changelog standard`.
 
 ## 4. Approval request
