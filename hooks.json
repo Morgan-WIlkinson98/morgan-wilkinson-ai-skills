@@ -1,0 +1,26 @@
+{
+  "UserPromptSubmit": [
+    {
+      "matcher": "",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "node \"${DEVIN_PLUGIN_ROOT:-$PLUGIN_ROOT}/hooks/approval-gate.mjs\"",
+          "timeout": 5
+        }
+      ]
+    }
+  ],
+  "PreToolUse": [
+    {
+      "matcher": "^(exec|mcp_call_tool|mcp__.*)$",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "node \"${DEVIN_PLUGIN_ROOT:-$PLUGIN_ROOT}/hooks/approval-gate.mjs\"",
+          "timeout": 5
+        }
+      ]
+    }
+  ]
+}
