@@ -18,7 +18,7 @@ Merging to `main` is the release: new sessions load the plugin at the latest com
 
 1. Merge `main` back into `dev` and push `dev` (`changelog` skill, section 6).
 2. Confirm the **Validate plugin** workflow passed on `main`.
-3. If `docs/diagrams/*.d2` changed, confirm the **Render diagrams** workflow committed updated `.svg` files.
+3. If `docs/diagrams/` changed, confirm the **Check diagrams** workflow passed.
 4. Refresh the installed plugin: `devin plugins update morgan-wilkinson-skills`.
 5. In a new session, verify:
    - `devin plugins info morgan-wilkinson-skills` lists the `changelog` and `ui-ux` skills, the `coding-behavior` rule, and the hooks.

@@ -64,13 +64,13 @@ Requires `node` on `PATH`. Plugin hooks are best effort and fail open: if the ho
 ## CI
 
 - **Validate plugin** (`.github/workflows/validate.yml`) — on pushes to `main` and `dev` and every pull request: verifies `plugin.json` parses and has a valid `name`, `AGENTS.md` exists, `hooks.json` parses and its referenced scripts exist, every `skills/*/SKILL.md` has `name` + `description` frontmatter, and every `rules/*.md` has `trigger` + `description` frontmatter; then runs the approval-gate hook tests.
-- **Render diagrams** (`.github/workflows/diagrams.yml`) — when `docs/diagrams/*.d2` change on `main`: installs `d2`, re-renders every `.d2` to `.svg`, and commits the results.
+- **Check diagrams** (`.github/workflows/diagrams.yml`) — on pull requests and pushes to `main` and `dev` that touch `docs/diagrams/`: installs `d2` pinned to `v0.9.0` (SHA-256 verified), re-renders every `.d2` to `.svg`, and fails if the committed `.svg` files differ. It never pushes, so it works with the protected `main` branch.
 
 ## Development
 
 All changes follow the workflow defined in `AGENTS.md`: GitHub issue → `feature/<description>` branch from latest `dev` → pull request into `dev` → `release/<yyyy-mm-dd>` branch cut from `dev` with the changelog compiled → pull request from the release branch into `main` → explicit human merge approval → `main` merged back into `dev`. Merging to `main` is the release — new sessions pick up the plugin at the latest commit on the default branch. Each change adds a Pending entry under `changelog/unreleased/`; see `docs/DEPLOYMENT-CHECKLIST.md` for the post-merge steps.
 
-Diagrams are authored in [D2](https://d2lang.com/) under `docs/diagrams/`; the rendered `.svg` is committed alongside the `.d2` source (CI also re-renders on merge). Do not use mermaid.
+Diagrams are authored in [D2](https://d2lang.com/) under `docs/diagrams/`; render with `d2` `v0.9.0` and commit the `.svg` alongside the `.d2` source (CI fails if they are out of date). Do not use mermaid.
 
 ## License
 
