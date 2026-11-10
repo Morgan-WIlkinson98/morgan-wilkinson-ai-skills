@@ -12,15 +12,25 @@ import { tmpdir } from 'node:os';
 // approval, and the blocker patterns below still catch negations/questions.
 const AFFIRMATIVE =
   /\b(approv\w*|affirmative|yes|yeah|yep|yup|go ahead|go for it|proceed|do it|ship it|send it|lgtm|looks good|sounds good|good to go|works for me|make it so|ok(?:ay)?|sure|fine|absolutely|definitely|of course|certainly|please do)\b/i;
-// Direct imperatives naming the action: "push it", "merge the branch", "open a PR".
+// Direct imperatives naming the action: "push it", "merge into main", "open a PR".
 const IMPERATIVE =
-  /\b(push|merge|open|create|ship|deploy|publish|send)\s+(it|them|this|that|these|the|an?)\b/i;
-// Negations and status questions void approval even if an affirmative appears.
-const BLOCKER =
-  /\b(don'?t|do not|didn'?t|doesn'?t|can'?t|cannot|won'?t|wouldn'?t|shouldn'?t|not yet|not now|wait|hold (?:off|on)|stop|cancel|never ?mind)\b|\b(?:did|have|has|had|is|are|was|were|does) (?:you|it|that|the|they)\b|\bdo (?:you|that|the|they)\b/i;
+  /\b(push|merge|open|create|ship|deploy|publish|send)\s+(it|them|this|that|these|those|the|an?|in|into|to|up|now|away|ahead|prs?|pull requests?|branches?)\b/i;
+// One-word commands replying to an approval ask: "merge", "go", "proceed".
+const SOLO_IMPERATIVE = /^\s*(push|merge|ship|send|deploy|publish|proceed|go)\s*[.!]?\s*$/i;
+// Negations, status questions, permission-seeking, and hypotheticals void
+// approval even if an affirmative appears — false negatives just re-ask.
+const BLOCKER = new RegExp([
+  String.raw`\b(?:don'?t|do not|didn'?t|doesn'?t|can'?t|cannot|won'?t|wouldn'?t|shouldn'?t|haven'?t|hasn'?t|hadn'?t|not yet|not now|wait|hold (?:off|on)|stop|cancel|never ?mind)\b`,
+  String.raw`\b(?:did|have|has|had|is|are|was|were|does) (?:you|it|that|the|they|this)\b`,
+  String.raw`\bdo (?:you|that|the|they|this)\b`,
+  String.raw`\b(?:should|shall|may) (?:i|we|you)\b`,
+  String.raw`\b(?:can|could) (?:i|we)\b`,
+  String.raw`\b(?:when|why|how) (?:will|did|do|does|are|is|was|were|have|has|had|would|should|can|could|must)\b`,
+  String.raw`\b(?:what if|if (?:i|we|you|it))\b`,
+].join('|'), 'i');
 
 const approves = (text) =>
-  (AFFIRMATIVE.test(text) || IMPERATIVE.test(text)) && !BLOCKER.test(text);
+  (AFFIRMATIVE.test(text) || IMPERATIVE.test(text) || SOLO_IMPERATIVE.test(text)) && !BLOCKER.test(text);
 
 const GATED_COMMANDS = [
   [/\bgit\s+(?:-\S+\s+(?:\S+\s+)?)*push\b/, 'git push'],

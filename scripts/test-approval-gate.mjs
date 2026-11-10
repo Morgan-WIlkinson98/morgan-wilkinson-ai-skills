@@ -63,6 +63,15 @@ try {
     ['a9', 'approve'],
     ['a10', 'Approved'],
     ['a11', 'I approve'],
+    ['a12', 'merge into main'],
+    ['a13', 'push to origin'],
+    ['a14', 'merge pr 145'],
+    ['a15', 'merge it into main'],
+    ['a16', 'merge'],
+    ['a17', 'go'],
+    ['a18', 'push it up'],
+    ['a19', 'can you merge into main'],
+    ['a20', 'will you merge it'],
   ]) {
     expect(`"${text}" allows push`, (prompt(id, text), exec(id, 'git push')), 0);
   }
@@ -77,6 +86,12 @@ try {
     ['n6', 'hold off on that'],
     ['n7', 'interesting'],
     ['n8', 'no'],
+    ['n9', 'should I merge into main?'],
+    ['n10', 'when will you merge into main?'],
+    ['n11', 'what if we merge into main?'],
+    ['n12', 'why did you merge it?'],
+    ['n13', "can we merge it?"],
+    ['n14', 'the push failed, do not retry'],
   ]) {
     expect(`"${text}" does not allow push`, (prompt(id, text), exec(id, 'git push')), 2);
   }
