@@ -12,7 +12,7 @@ Changes merged to `main`, newest first. Changes still in progress are in
 - **Status:** Approved
 - **Type:** Fix
 - **Issue:** [#12](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/issues/12)
-- **Pull request:** [#<n>](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/<n>) · [Files changed](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/<n>/files)
+- **Pull request:** [#13](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/13) · [Files changed](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/13/files)
 
 **What changed:** Direct instructions to perform a gated action now count as approval: "merge into main", "push to origin", "merge pr 145", and one-word commands like "merge" or "go". Permission questions and hypotheticals ("can we merge it", "should I merge", "what if we merge", "when will you merge") are explicitly not approval.
 
