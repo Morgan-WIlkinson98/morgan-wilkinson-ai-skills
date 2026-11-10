@@ -116,16 +116,17 @@ Items that don't apply may be dropped rather than left as empty ritual.
 
 ## Explicit approval — required for gated actions
 
-The ONLY valid approval is the exact phrases **"I approve"** or **"Approved"**.
+Approval = you describe the specific action and ask first, then the user
+replies with a clear positive affirmation. No magic words are required —
+"yes", "go ahead", "do it", "push it", "approved" all count.
 
-- Statements like "this seems good", "ok", or "looks fine" are
-  acknowledgments of progress — NOT approval.
-- Follow-up questions and continued conversation are NOT approval.
+- The affirmation must be unambiguous — a reply that is only a follow-up
+  question, a status question ("did you push?"), a negation ("not yet",
+  "don't"), or continued conversation is NOT approval.
 - Approval covers only the actions you described when you asked for it. It is
   not standing permission for later actions.
-- If you are unsure whether the user has approved, stop and prompt: state
-  that you cannot proceed until they explicitly say "I approve" or
-  "Approved".
+- If you are unsure whether the user has approved, stop and prompt: describe
+  the action again and ask for a clear go-ahead.
 
 Approval-gated actions:
 
@@ -140,9 +141,10 @@ Approval-gated actions:
 
 This plugin's `hooks.json` also blocks `git push`, `gh pr create`,
 `gh pr merge`, and the GitHub MCP PR/push tools unless the user's current
-message contains "Approved" or "I approve". The hook is a backstop — the
-rules above still apply when it is not loaded. If the hook blocks an action,
-stop and ask; never rephrase the command to get around it.
+message is a clear affirmative ("yes", "go ahead", "push it", "approved",
+…). The hook is a backstop — the rules above still apply when it is not
+loaded. If the hook blocks an action, stop and ask; never rephrase the
+command to get around it.
 
 ## Changelog
 

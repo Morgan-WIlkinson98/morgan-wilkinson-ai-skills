@@ -44,7 +44,7 @@ Collect and show the user:
 
 ## 4. Approval request
 
-Present one list and wait for "Approved" / "I approve":
+Present one list and wait for a clear affirmative reply:
 
 - Push `dev` (if new). Merge `feature/adopt-standards` into `dev` and push `dev`, if the user wants it tested there first.
 - Push `feature/adopt-standards`, compile its entry (`changelog` skill, section 6), and open its PR to `main`.
