@@ -12,7 +12,7 @@ Changes merged to `main`, newest first. Changes still in progress are in
 - **Status:** Approved
 - **Type:** Change
 - **Issue:** [#10](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/issues/10)
-- **Pull request:** [#<n>](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/<n>) · [Files changed](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/<n>/files)
+- **Pull request:** [#11](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/11) · [Files changed](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/11/files)
 
 **What changed:** The approval gate no longer requires the literal phrases "I approve" or "Approved". Any clear positive affirmation in the same turn — "yes", "go ahead", "do it", "push it", "approved", and similar — unlocks the gated action. Negations and status questions still do not count.
 
