@@ -7,6 +7,17 @@ Changes merged to `main`, newest first. Changes still in progress are in
 
 ## 2026
 
+### 2026-11-10 — Relax approval gate to accept any clear affirmative
+
+- **Status:** Approved
+- **Type:** Change
+- **Issue:** [#10](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/issues/10)
+- **Pull request:** [#<n>](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/<n>) · [Files changed](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/<n>/files)
+
+**What changed:** The approval gate no longer requires the literal phrases "I approve" or "Approved". Any clear positive affirmation in the same turn — "yes", "go ahead", "do it", "push it", "approved", and similar — unlocks the gated action. Negations and status questions still do not count.
+
+**Why:** The exact-phrase requirement was too strict: natural approvals like "yes, push it" were blocked, forcing stilted replies. The gate still requires the agent to describe the specific action and ask first, and approval remains scoped to the same turn — it is just phrased like a human now.
+
 ### 2026-11-02 — Make dev a testing branch and ship feature branches to main by PR
 
 - **Status:** Approved
