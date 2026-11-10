@@ -31,7 +31,7 @@ function expect(name, actual, expected) {
 }
 
 try {
-  expect('prompt without approval is recorded', prompt('p1', 'this looks good, ok'), 0);
+  expect('prompt without approval is recorded', prompt('p1', 'interesting, tell me more'), 0);
   expect('git push blocked without approval', exec('p1', 'git push -u origin feature/x'), 2);
   expect('git -C <dir> push blocked', exec('p1', 'git -C /repo push'), 2);
   expect('chained git push blocked', exec('p1', 'git add . && git commit -m x && git push'), 2);
@@ -49,10 +49,40 @@ try {
     run({ hook_event_name: 'PreToolUse', session_id: 's1', prompt_id: 'p1', tool_name: 'mcp_call_tool', tool_input: { server_name: 'github-mcp-server', tool_name: 'get_pull_request' } }),
     0
   );
-  expect('lowercase "approve" is not approval', (prompt('p2', 'approve'), exec('p2', 'git push')), 2);
-  expect('"Approved" allows push in same turn', (prompt('p3', 'Approved'), exec('p3', 'git push')), 0);
-  expect('"I approve" allows PR in same turn', (prompt('p4', 'I approve, open it'), exec('p4', 'gh pr create')), 0);
-  expect('approval does not carry to the next turn', (prompt('p5', 'why did you do that?'), exec('p5', 'git push')), 2);
+
+  // Affirmatives that now count as approval (same turn).
+  for (const [id, text] of [
+    ['a1', 'yes'],
+    ['a2', 'go ahead'],
+    ['a3', 'do it'],
+    ['a4', 'push it'],
+    ['a5', 'sounds good'],
+    ['a6', 'ok'],
+    ['a7', 'yes, merge the branch'],
+    ['a8', 'can you open a pr'],
+    ['a9', 'approve'],
+    ['a10', 'Approved'],
+    ['a11', 'I approve'],
+  ]) {
+    expect(`"${text}" allows push`, (prompt(id, text), exec(id, 'git push')), 0);
+  }
+
+  // Replies that still do not count.
+  for (const [id, text] of [
+    ['n1', "don't push"],
+    ['n2', 'not yet'],
+    ['n3', 'did you push?'],
+    ['n4', 'why did you do that?'],
+    ['n5', "yes but don't merge yet"],
+    ['n6', 'hold off on that'],
+    ['n7', 'interesting'],
+    ['n8', 'no'],
+  ]) {
+    expect(`"${text}" does not allow push`, (prompt(id, text), exec(id, 'git push')), 2);
+  }
+
+  expect('approval does not carry to the next turn', (prompt('x1', 'yes'), exec('x2', 'git push')), 2);
+  expect('approval in another session does not count', (prompt('x3', 'yes'), run({ hook_event_name: 'PreToolUse', session_id: 's2', prompt_id: 'x3', tool_name: 'exec', tool_input: { command: 'git push' } })), 2);
   expect('missing prompt_id fails closed', run({ hook_event_name: 'PreToolUse', session_id: 's1', tool_name: 'exec', tool_input: { command: 'git push' } }), 2);
   expect('malformed payload errors without blocking', spawnSync(process.execPath, [gate], { input: '{', encoding: 'utf8' }).status, 1);
 } finally {

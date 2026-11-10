@@ -22,4 +22,4 @@ Merging to `main` is the release: new sessions load the plugin at the latest com
 5. In a new session, verify:
    - `devin plugins info morgan-wilkinson-skills` lists the `adopt-standards`, `changelog`, and `ui-ux` skills, the `coding-behavior` rule, and the hooks.
    - `/hooks` shows the `UserPromptSubmit` and `PreToolUse` approval-gate hooks.
-   - Asking the agent to run `git push --dry-run` without "Approved" in the same message is blocked by the approval gate.
+   - Asking the agent to run `git push --dry-run` without an affirmative reply in the same message is blocked by the approval gate.
