@@ -7,6 +7,17 @@ Changes merged to `main`, newest first. Changes still in progress are in
 
 ## 2026
 
+### 2026-11-10 — Accept imperative instructions as approval in the gate
+
+- **Status:** Approved
+- **Type:** Fix
+- **Issue:** [#12](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/issues/12)
+- **Pull request:** [#13](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/13) · [Files changed](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/13/files)
+
+**What changed:** Direct instructions to perform a gated action now count as approval: "merge into main", "push to origin", "merge pr 145", and one-word commands like "merge" or "go". Permission questions and hypotheticals ("can we merge it", "should I merge", "what if we merge", "when will you merge") are explicitly not approval.
+
+**Why:** A user replied "merge into main" to an approval ask and the gate blocked the merge — the imperative pattern only accepted a verb plus a small object list, so common instruction phrasings were missed. Approval should mean "the user told me to do it", and a direct instruction is exactly that.
+
 ### 2026-11-10 — Relax approval gate to accept any clear affirmative
 
 - **Status:** Approved
