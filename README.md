@@ -14,7 +14,7 @@ A [Devin](https://devin.ai) plugin that ships personal rules and skills to every
 | `skills/ui-ux/` | Skill | Available as `/morgan-wilkinson-skills:ui-ux`; invoked for UI work |
 | `skills/adopt-standards/` | Skill | Available as `/morgan-wilkinson-skills:adopt-standards`; one-time migration of an existing repo to the branch workflow (`dev` as testing branch) and changelog |
 | `skills/changelog/` | Skill | Available as `/morgan-wilkinson-skills:changelog`; changelog templates, entry, pre-flight, and compile procedures |
-| `hooks.json` + `hooks/approval-gate.mjs` | Lifecycle hooks | Local sessions (CLI, Devin Desktop); blocks `git push`, `gh pr create`, `gh pr merge`, and GitHub MCP PR/push tools unless the current user message contains "Approved" or "I approve" |
+| `hooks.json` + `hooks/approval-gate.mjs` | Lifecycle hooks | Local sessions (CLI, Devin Desktop); blocks `git push`, `gh pr create`, `gh pr merge`, and GitHub MCP PR/push tools unless the current user message is a clear affirmative ("yes", "go ahead", "approved", …) |
 | `docs/diagrams/` | Documentation | `.d2` sources plus rendered `.svg` output |
 | `scripts/validate.mjs` | Tooling | Structural validation, also run in CI |
 | `scripts/test-approval-gate.mjs` | Tooling | Tests for the approval-gate hook, also run in CI |
@@ -57,7 +57,7 @@ Local installs are linked to the source folder; edits apply on the next session 
 
 `hooks/approval-gate.mjs` runs on two events:
 
-- `UserPromptSubmit` — records, per session, whether the current message contains "Approved" or "I approve" (case-sensitive). State is stored under `$PLUGIN_DATA/approval-gate/` (falls back to the system temp directory).
+- `UserPromptSubmit` — records, per session, whether the current message is a clear affirmative ("yes", "go ahead", "push it", "approved", …; case-insensitive). Negations and status questions do not count. State is stored under `$PLUGIN_DATA/approval-gate/` (falls back to the system temp directory).
 - `PreToolUse` (`exec`, `mcp_call_tool`, `mcp__*`) — exits `2` (block) for gated actions unless the approval was recorded for the same `prompt_id`. Approval does not carry over to later turns.
 
 Requires `node` on `PATH`. Plugin hooks are best effort and fail open: if the hook fails to load or run, the session continues without it, and the rules in `AGENTS.md` remain the primary control. Verify the hook is loaded with `/hooks` in a session.

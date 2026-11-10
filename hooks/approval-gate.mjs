@@ -1,13 +1,27 @@
 #!/usr/bin/env node
 // Blocks pushes, PR creation, and PR merges unless the user's current message
-// contains an explicit approval phrase ("I approve" or "Approved").
+// gives a clear positive affirmation ("yes", "go ahead", "push it", "approved").
 //   UserPromptSubmit: records whether the current prompt approves.
 //   PreToolUse:       blocks gated actions when the current prompt did not approve.
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 
-const APPROVAL = /(^|[^A-Za-z])(I approve|Approved)([^A-Za-z]|$)/;
+// Clear affirmatives answering "may I <action>?". Weak fillers ("ok", "sure")
+// are included intentionally: in context of a just-asked question they are
+// approval, and the blocker patterns below still catch negations/questions.
+const AFFIRMATIVE =
+  /\b(approv\w*|affirmative|yes|yeah|yep|yup|go ahead|go for it|proceed|do it|ship it|send it|lgtm|looks good|sounds good|good to go|works for me|make it so|ok(?:ay)?|sure|fine|absolutely|definitely|of course|certainly|please do)\b/i;
+// Direct imperatives naming the action: "push it", "merge the branch", "open a PR".
+const IMPERATIVE =
+  /\b(push|merge|open|create|ship|deploy|publish|send)\s+(it|them|this|that|these|the|an?)\b/i;
+// Negations and status questions void approval even if an affirmative appears.
+const BLOCKER =
+  /\b(don'?t|do not|didn'?t|doesn'?t|can'?t|cannot|won'?t|wouldn'?t|shouldn'?t|not yet|not now|wait|hold (?:off|on)|stop|cancel|never ?mind)\b|\b(?:did|have|has|had|is|are|was|were|does) (?:you|it|that|the|they)\b|\bdo (?:you|that|the|they)\b/i;
+
+const approves = (text) =>
+  (AFFIRMATIVE.test(text) || IMPERATIVE.test(text)) && !BLOCKER.test(text);
+
 const GATED_COMMANDS = [
   [/\bgit\s+(?:-\S+\s+(?:\S+\s+)?)*push\b/, 'git push'],
   [/\bgh\s+pr\s+create\b/, 'gh pr create'],
@@ -40,8 +54,9 @@ function approvedThisTurn(sessionId, promptId) {
 function block(action) {
   const reason =
     `Blocked by morgan-wilkinson-skills approval gate: "${action}" requires explicit approval. ` +
-    'Stop, summarize exactly what will be pushed or opened, and ask the user to reply "Approved" or "I approve". ' +
-    'Approval only counts in the same message turn as the action.';
+    'Stop, describe exactly what will be pushed or opened, and ask the user to confirm. ' +
+    'Any clear affirmative reply ("yes", "go ahead", "push it", "approved") counts — ' +
+    'but only in the same message turn as the action.';
   process.stdout.write(JSON.stringify({ decision: 'block', reason }));
   process.stderr.write(reason);
   process.exit(2);
@@ -61,7 +76,7 @@ if (event === 'UserPromptSubmit') {
     mkdirSync(stateDir, { recursive: true });
     writeFileSync(
       statePath(payload.session_id),
-      JSON.stringify({ prompt_id: payload.prompt_id ?? null, approved: APPROVAL.test(payload.prompt ?? '') })
+      JSON.stringify({ prompt_id: payload.prompt_id ?? null, approved: approves(payload.prompt ?? '') })
     );
   }
 } else if (event === 'PreToolUse') {
