@@ -22,7 +22,7 @@ const SOLO_IMPERATIVE = /^\s*(push|merge|ship|send|deploy|publish|proceed|go)\s*
 const BLOCKER = new RegExp([
   String.raw`\b(?:don'?t|do not|didn'?t|doesn'?t|can'?t|cannot|won'?t|wouldn'?t|shouldn'?t|haven'?t|hasn'?t|hadn'?t|not yet|not now|wait|hold (?:off|on)|stop|cancel|never ?mind)\b`,
   String.raw`\b(?:did|have|has|had|is|are|was|were|does) (?:you|it|that|the|they|this)\b`,
-  String.raw`\bdo (?:you|that|the|they|this)\b`,
+  String.raw`\bdo (?:you|they)\b`,
   String.raw`\b(?:should|shall|may) (?:i|we|you)\b`,
   String.raw`\b(?:can|could) (?:i|we)\b`,
   String.raw`\b(?:when|why|how) (?:will|did|do|does|are|is|was|were|have|has|had|would|should|can|could|must)\b`,
