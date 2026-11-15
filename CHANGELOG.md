@@ -12,7 +12,7 @@ Changes merged to `main`, newest first. Changes still in progress are in
 - **Status:** Approved
 - **Type:** Fix
 - **Issue:** [#14](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/issues/14)
-- **Pull request:** [#<n>](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/<n>) · [Files changed](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/<n>/files)
+- **Pull request:** [#<n>](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/15) · [Files changed](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/15/files)
 
 **What changed:** The gate's BLOCKER regex no longer treats `do that`, `do this`, or `do the <thing>` as status questions. Only the real question forms (`do you`, `do they`) still void approval. A reply like "yes thats good go ahead and do that" now counts as approval instead of being rejected.
 
