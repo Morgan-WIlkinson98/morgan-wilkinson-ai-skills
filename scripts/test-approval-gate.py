@@ -135,6 +135,11 @@ try:
         prompt(prompt_id, text)
         expect(f'"{text}" does not allow push', exec_hook(prompt_id, "git push"), 2)
 
+    prompt("w1", 'please repeat "go\nahead" exactly')
+    expect("line-wrapped quoted affirmation does not allow push", exec_hook("w1", "git push"), 2)
+    prompt("w2", "yes, push it because this is\nthe right approach")
+    expect("line-wrapped prose does not void approval", exec_hook("w2", "git push"), 0)
+
     prompt("x1", "yes")
     expect("approval does not carry to the next turn", exec_hook("x2", "git push"), 2)
     prompt("x3", "yes")

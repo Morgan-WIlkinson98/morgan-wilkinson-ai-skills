@@ -10,26 +10,37 @@ import sys
 import tempfile
 from pathlib import Path
 
+# Python's re.ASCII makes both \w and \s ASCII-only. JavaScript \w is ASCII-only,
+# but \s also matches Unicode whitespace, so expand whitespace classes explicitly.
+JS_WHITESPACE_CHARS = r"\t\n\v\f\r \u00a0\u1680\u2000-\u200a\u2028\u2029\u202f\u205f\u3000\ufeff"
+
+
+def compile_js_regex(pattern, flags=0):
+    pattern = pattern.replace(r"\s", f"[{JS_WHITESPACE_CHARS}]")
+    pattern = pattern.replace(r"\S", f"[^{JS_WHITESPACE_CHARS}]")
+    return re.compile(pattern, flags | re.ASCII)
+
+
 # Clear affirmatives answering "may I <action>?". Weak fillers ("ok", "sure")
 # are included intentionally: in context of a just-asked question they are
 # approval, and the blocker patterns below still catch negations/questions.
-AFFIRMATIVE = re.compile(
+AFFIRMATIVE = compile_js_regex(
     r"\b(approv\w*|affirmative|yes|yeah|yep|yup|go ahead|go for it|proceed|do it|ship it|send it|lgtm|looks good|sounds good|good to go|works for me|make it so|ok(?:ay)?|sure|fine|absolutely|definitely|of course|certainly|please do)\b",
     re.IGNORECASE | re.ASCII,
 )
 # Direct imperatives naming the action: "push it", "merge into main", "open a PR".
-IMPERATIVE = re.compile(
+IMPERATIVE = compile_js_regex(
     r"\b(push|merge|open|create|ship|deploy|publish|send)\s+(it|them|this|that|these|those|the|an?|in|into|to|up|now|away|ahead|prs?|pull requests?|branches?)\b",
     re.IGNORECASE | re.ASCII,
 )
 # One-word commands replying to an approval ask: "merge", "go", "proceed".
-SOLO_IMPERATIVE = re.compile(
+SOLO_IMPERATIVE = compile_js_regex(
     r"^\s*(push|merge|ship|send|deploy|publish|proceed|go)\s*[.!]?\s*$",
     re.IGNORECASE | re.ASCII,
 )
 # Negations, status questions, permission-seeking, and hypotheticals void
 # approval even if an affirmative appears — false negatives just re-ask.
-BLOCKER = re.compile(
+BLOCKER = compile_js_regex(
     "|".join(
         [
             r"\b(?:don'?t|do not|didn'?t|doesn'?t|can'?t|cannot|won'?t|wouldn'?t|shouldn'?t|haven'?t|hasn'?t|hadn'?t|not yet|not now|wait|hold (?:off|on)|stop|cancel|never ?mind)\b",
@@ -45,25 +56,15 @@ BLOCKER = re.compile(
 )
 
 GATED_COMMANDS = [
-    (re.compile(r"\bgit\s+(?:-\S+\s+(?:\S+\s+)?)*push\b", re.ASCII), "git push"),
-    (re.compile(r"\bgh\s+pr\s+create\b", re.ASCII), "gh pr create"),
-    (re.compile(r"\bgh\s+pr\s+merge\b", re.ASCII), "gh pr merge"),
+    (compile_js_regex(r"\bgit\s+(?:-\S+\s+(?:\S+\s+)?)*push\b"), "git push"),
+    (compile_js_regex(r"\bgh\s+pr\s+create\b"), "gh pr create"),
+    (compile_js_regex(r"\bgh\s+pr\s+merge\b"), "gh pr merge"),
 ]
-GATED_MCP_TOOLS = re.compile(r"(^|_)(create_pull_request|merge_pull_request|push_files|create_or_update_file)$", re.ASCII)
+GATED_MCP_TOOLS = compile_js_regex(r"(^|_)(create_pull_request|merge_pull_request|push_files|create_or_update_file)$")
 
 STATE_DIR = Path(os.environ.get("PLUGIN_DATA") or Path(tempfile.gettempdir()) / "morgan-wilkinson-skills") / "approval-gate"
 
-# JavaScript \s includes Unicode whitespace even though \w is ASCII-only.
-# Normalize that whitespace before using ASCII-aware Python regexes.
-JS_WHITESPACE = re.compile(r"[\t\n\v\f\r \u00a0\u1680\u2000-\u200a\u2028\u2029\u202f\u205f\u3000\ufeff]")
-
-
-def normalize_js_whitespace(text):
-    return JS_WHITESPACE.sub(" ", text)
-
-
 def approves(text):
-    text = normalize_js_whitespace(text)
     return bool(
         (AFFIRMATIVE.search(text) or IMPERATIVE.search(text) or SOLO_IMPERATIVE.search(text))
         and not BLOCKER.search(text)
@@ -78,7 +79,7 @@ def state_path(session_id):
 def gated_action(tool_name="", tool_input=None):
     tool_input = tool_input or {}
     if tool_name == "exec":
-        command = normalize_js_whitespace(tool_input.get("command") or "")
+        command = tool_input.get("command") or ""
         for pattern, label in GATED_COMMANDS:
             if pattern.search(command):
                 return label
