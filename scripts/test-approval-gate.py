@@ -17,7 +17,7 @@ def run(payload):
     env = dict(os.environ)
     env["PLUGIN_DATA"] = str(DATA_DIR)
     return subprocess.run(
-        [sys.executable, str(GATE)],
+        ["python3", str(GATE)],
         input=json.dumps(payload),
         env=env,
         text=True,
@@ -54,6 +54,7 @@ def expect(name, actual, expected):
 try:
     expect("prompt without approval is recorded", prompt("p1", "interesting, tell me more"), 0)
     expect("git push blocked without approval", exec_hook("p1", "git push -u origin feature/x"), 2)
+    expect("git push with nonbreaking space blocked", exec_hook("p1", "git\u00a0push"), 2)
     expect("git -C <dir> push blocked", exec_hook("p1", "git -C /repo push"), 2)
     expect("chained git push blocked", exec_hook("p1", "git add . && git commit -m x && git push"), 2)
     expect("gh pr create blocked", exec_hook("p1", "gh pr create --title t --body b"), 2)
@@ -109,6 +110,7 @@ try:
         ("a18", "push it up"),
         ("a19", "can you merge into main"),
         ("a20", "will you merge it"),
+        ("a21", "merge\u00a0into\u00a0main"),
     ]:
         prompt(prompt_id, text)
         expect(f'"{text}" allows push', exec_hook(prompt_id, "git push"), 0)
@@ -132,6 +134,11 @@ try:
     ]:
         prompt(prompt_id, text)
         expect(f'"{text}" does not allow push', exec_hook(prompt_id, "git push"), 2)
+
+    prompt("w1", 'please repeat "go\nahead" exactly')
+    expect("line-wrapped quoted affirmation does not allow push", exec_hook("w1", "git push"), 2)
+    prompt("w2", "yes, push it because this is\nthe right approach")
+    expect("line-wrapped prose does not void approval", exec_hook("w2", "git push"), 0)
 
     prompt("x1", "yes")
     expect("approval does not carry to the next turn", exec_hook("x2", "git push"), 2)
@@ -163,7 +170,7 @@ try:
     )
     expect(
         "malformed payload errors without blocking",
-        subprocess.run([sys.executable, str(GATE)], input="{", text=True, capture_output=True, check=False).returncode,
+        subprocess.run(["python3", str(GATE)], input="{", text=True, capture_output=True, check=False).returncode,
         1,
     )
 finally:
