@@ -12,7 +12,7 @@ Changes merged to `main`, newest first. Changes still in progress are in
 - **Status:** Approved
 - **Type:** Fix
 - **Issue:** [#16](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/issues/16)
-- **Pull request:** [#<n>](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/<n>) · [Files changed](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/<n>/files)
+- **Pull request:** [#17](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/17) · [Files changed](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/17/files)
 
 **What changed:** The approval-gate hook and its tests now run with `python3` instead of `node`. Hook behavior is unchanged: pushes, PR creation, and PR merges still require clear same-turn approval.
 
