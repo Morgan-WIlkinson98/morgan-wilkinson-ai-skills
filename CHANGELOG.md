@@ -7,6 +7,17 @@ Changes merged to `main`, newest first. Changes still in progress are in
 
 ## 2026
 
+### 2026-11-26 — Port approval gate to Python
+
+- **Status:** Approved
+- **Type:** Fix
+- **Issue:** [#16](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/issues/16)
+- **Pull request:** [#17](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/17) · [Files changed](https://github.com/Morgan-WIlkinson98/morgan-wilkinson-ai-skills/pull/17/files)
+
+**What changed:** The approval-gate hook and its tests now run with `python3` instead of `node`. Hook behavior is unchanged: pushes, PR creation, and PR merges still require clear same-turn approval.
+
+**Why:** Devin session VMs do not guarantee a Node.js runtime, so the hook exited with code 127 and failed open instead of enforcing the approval gate. Python is already available on those VMs.
+
 ### 2026-11-15 — approval-gate: stop voiding "do that / do the X" approvals
 
 - **Status:** Approved

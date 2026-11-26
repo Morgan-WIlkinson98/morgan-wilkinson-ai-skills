@@ -20,6 +20,7 @@ Merging to `main` is the release: new sessions load the plugin at the latest com
 3. If `docs/diagrams/` changed, confirm the **Check diagrams** workflow passed.
 4. Refresh the installed plugin: `devin plugins update morgan-wilkinson-skills`.
 5. In a new session, verify:
+   - `python3 --version` succeeds in the session shell.
    - `devin plugins info morgan-wilkinson-skills` lists the `adopt-standards`, `changelog`, and `ui-ux` skills, the `coding-behavior` rule, and the hooks.
    - `/hooks` shows the `UserPromptSubmit` and `PreToolUse` approval-gate hooks.
    - Asking the agent to run `git push --dry-run` without an affirmative reply in the same message is blocked by the approval gate.

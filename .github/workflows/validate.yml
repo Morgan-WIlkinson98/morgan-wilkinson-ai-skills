@@ -19,4 +19,4 @@ jobs:
         run: node scripts/validate.mjs
 
       - name: Test approval-gate hook
-        run: node scripts/test-approval-gate.mjs
+        run: python3 scripts/test-approval-gate.py
