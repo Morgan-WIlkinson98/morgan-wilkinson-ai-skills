@@ -5,7 +5,7 @@
       "hooks": [
         {
           "type": "command",
-          "command": "node \"${DEVIN_PLUGIN_ROOT:-$PLUGIN_ROOT}/hooks/approval-gate.mjs\"",
+          "command": "python3 \"${DEVIN_PLUGIN_ROOT:-$PLUGIN_ROOT}/hooks/approval-gate.py\"",
           "timeout": 5
         }
       ]
@@ -17,7 +17,7 @@
       "hooks": [
         {
           "type": "command",
-          "command": "node \"${DEVIN_PLUGIN_ROOT:-$PLUGIN_ROOT}/hooks/approval-gate.mjs\"",
+          "command": "python3 \"${DEVIN_PLUGIN_ROOT:-$PLUGIN_ROOT}/hooks/approval-gate.py\"",
           "timeout": 5
         }
       ]
