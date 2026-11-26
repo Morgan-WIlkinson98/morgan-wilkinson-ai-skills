@@ -53,8 +53,17 @@ GATED_MCP_TOOLS = re.compile(r"(^|_)(create_pull_request|merge_pull_request|push
 
 STATE_DIR = Path(os.environ.get("PLUGIN_DATA") or Path(tempfile.gettempdir()) / "morgan-wilkinson-skills") / "approval-gate"
 
+# JavaScript \s includes Unicode whitespace even though \w is ASCII-only.
+# Normalize that whitespace before using ASCII-aware Python regexes.
+JS_WHITESPACE = re.compile(r"[\t\n\v\f\r \u00a0\u1680\u2000-\u200a\u2028\u2029\u202f\u205f\u3000\ufeff]")
+
+
+def normalize_js_whitespace(text):
+    return JS_WHITESPACE.sub(" ", text)
+
 
 def approves(text):
+    text = normalize_js_whitespace(text)
     return bool(
         (AFFIRMATIVE.search(text) or IMPERATIVE.search(text) or SOLO_IMPERATIVE.search(text))
         and not BLOCKER.search(text)
@@ -69,7 +78,7 @@ def state_path(session_id):
 def gated_action(tool_name="", tool_input=None):
     tool_input = tool_input or {}
     if tool_name == "exec":
-        command = tool_input.get("command") or ""
+        command = normalize_js_whitespace(tool_input.get("command") or "")
         for pattern, label in GATED_COMMANDS:
             if pattern.search(command):
                 return label

@@ -54,6 +54,7 @@ def expect(name, actual, expected):
 try:
     expect("prompt without approval is recorded", prompt("p1", "interesting, tell me more"), 0)
     expect("git push blocked without approval", exec_hook("p1", "git push -u origin feature/x"), 2)
+    expect("git push with nonbreaking space blocked", exec_hook("p1", "git\u00a0push"), 2)
     expect("git -C <dir> push blocked", exec_hook("p1", "git -C /repo push"), 2)
     expect("chained git push blocked", exec_hook("p1", "git add . && git commit -m x && git push"), 2)
     expect("gh pr create blocked", exec_hook("p1", "gh pr create --title t --body b"), 2)
@@ -109,6 +110,7 @@ try:
         ("a18", "push it up"),
         ("a19", "can you merge into main"),
         ("a20", "will you merge it"),
+        ("a21", "merge\u00a0into\u00a0main"),
     ]:
         prompt(prompt_id, text)
         expect(f'"{text}" allows push', exec_hook(prompt_id, "git push"), 0)
