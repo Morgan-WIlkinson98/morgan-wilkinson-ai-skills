@@ -17,7 +17,7 @@ def run(payload):
     env = dict(os.environ)
     env["PLUGIN_DATA"] = str(DATA_DIR)
     return subprocess.run(
-        [sys.executable, str(GATE)],
+        ["python3", str(GATE)],
         input=json.dumps(payload),
         env=env,
         text=True,
@@ -165,7 +165,7 @@ try:
     )
     expect(
         "malformed payload errors without blocking",
-        subprocess.run([sys.executable, str(GATE)], input="{", text=True, capture_output=True, check=False).returncode,
+        subprocess.run(["python3", str(GATE)], input="{", text=True, capture_output=True, check=False).returncode,
         1,
     )
 finally:
